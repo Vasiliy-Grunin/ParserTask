@@ -4,7 +4,7 @@ namespace Parser
 {
     internal class StatisticsDbContext: DbContext
     {
-        public StatisticsDbContext()
+        public StatisticsDbContext() //: base("Parser.StatisticsDbContext")
         { 
         }
 

@@ -27,7 +27,8 @@ namespace Parser
             private set
             {
                 var match =
-                    new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)");
+                    new Regex(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+,RegexOptions.IgnoreCase);
                 try
                 {
                     Contract.Assert(match.IsMatch(value), "error input");
@@ -140,6 +141,7 @@ namespace Parser
             var htmlWeb = new HtmlWeb();
             try
             {
+                htmlWeb.OverrideEncoding = System.Text.Encoding.UTF8;
                 var doc = htmlWeb.Load(Url);
                 var textCollection = doc.DocumentNode.SelectNodes("//body");
                 var result = new List<string>();

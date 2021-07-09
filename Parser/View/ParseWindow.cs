@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Parser
@@ -12,6 +13,7 @@ namespace Parser
         private readonly Button printStatistics;
         private readonly Button saveStatistics;
         private readonly Button download;
+        private readonly Button delete;
 
         private readonly Label search;
 
@@ -22,6 +24,7 @@ namespace Parser
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             ClientSize = new Size(800, 600);
+
             search = new Label
             {
                 Text = "Result: ",
@@ -58,6 +61,12 @@ namespace Parser
                 Location = new Point(300, 20),
                 Size = new Size(100, 20)
             };
+            delete = new Button
+            {
+                Text = "delete",
+                Location = new Point(400,20),
+                Size = new Size(100, 20)
+            };
             results = new Panel
             {
                 Location = new Point(0, 40),
@@ -68,6 +77,7 @@ namespace Parser
             saveStatistics.Click += SaveStatistics;
             printStatistics.Click += PrintStatistics;
             download.Click += DowloadHistory;
+            delete.Click += DeleteStatistics;
 
             
             url.KeyDown += (sender, e) =>
@@ -83,6 +93,15 @@ namespace Parser
             Controls.Add(printStatistics);
             Controls.Add(saveStatistics);
             Controls.Add(download);
+            Controls.Add(delete);
+        }
+
+        private void DeleteStatistics(object sender, EventArgs e)
+        {
+            if (!Change())
+                return;
+            var deleteUrl = url.Text;
+            StatisticsDbTask.RemoveStatistics(deleteUrl);
         }
 
         private void PrintPage(object sender, EventArgs e)
@@ -134,7 +153,7 @@ namespace Parser
         {
             if(!Page.IsUrl(url.Text))
             {
-                var message = new Label{ Text = "please write url from work app" };
+                var message = new Label{ Text = "please write url for work app" };
                 message.Size = new Size(200, 20);
                 results.Controls.Add(message);
                 return false;
@@ -143,8 +162,8 @@ namespace Parser
             { 
                 page = new Page(url.Text);
                 results.Controls.Clear();
+                return true;
             }
-            return true;
         }
     }
 }
